@@ -1,1 +1,1 @@
-[{"bus": "70", "destination": "Alboraia", "time": "error", "time_type": "minutes_left"}, {"bus": "N4", "destination": "Est.del Nord", "time": "14", "time_type": "minutes_left"}, {"bus": "N4", "destination": "Est.del Nord", "time": "23:33", "time_type": "time"}]
+[{"bus": "N4", "destination": "Est.del Nord", "time": "39", "time_type": "minutes_left"}, {"bus": "N4", "destination": "Est.del Nord", "time": "00:22", "time_type": "time"}]

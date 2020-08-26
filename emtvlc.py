@@ -25,8 +25,6 @@ class EMTVLC:
 		}
 		if bus != 0:
 			data['linea'] = bus
-			
-		print(data)
 		
 		headers = {
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0',
@@ -43,6 +41,8 @@ class EMTVLC:
 		if r != None and r.status_code == 200:
 			responseText = r.text
 			#print(responseText)
+			#f = open('response.xml', 'w')
+			#f.write(responseText)
 			return self.parse_xml(responseText)
 		else:
 			raise ApiException("REQUEST", "API not accessible")
@@ -57,37 +57,53 @@ class EMTVLC:
 		results = []
 		
 		for bus in root[0]:
-			#filter out info elements
+			#filter out 'info' elements
 			if bus.tag == "bus":
 			
-				#has error tag
-				if bus[4].text != None:
+				# no minutos or horallegada = error
+				if len(bus) == 3:
 					results.append({
-						'error': bus[4].text
+						'error': bus[2].text
+					})
+					continue
+				
+				if len(bus) != 5:
+					results.append({
+						'error': "Invalid bus response"
+					})
+					continue
+				
+				linea = bus[0].text
+				destino = bus[1].text
+				minutos = bus[2].text
+				horaLlegada = bus[3].text
+				error = bus[4].text
+				
+				#has error tag
+				if error != None:
+					results.append({
+						'error': error
 					})
 					continue
 				
 				busResult = {
-					'bus': bus[0].text,
-					'destination': bus[1].text.decode("utf-8")
+					'linea': linea,
+					'destino': destino
 				}
 				
 				# 'minutos' or 'horaLlegada'
-				if bus[2].text != None:
+				if minutos != None:
 				
-					minutos = bus[2].text
 					if "min." in minutos:
-						busResult['time'] = minutos.replace(" min.", "")
+						busResult['minutos'] = minutos.replace(" min.", "")
 					elif bytes(minutos, "utf-8") == "Próximo":
-						busResult['time'] = 1
+						busResult['minutos'] = 1
 					else:
-						busResult['time'] = "error"
-					busResult['time_type'] = "minutes_left"
+						busResult['minutos'] = "error"
 					
-				elif bus[3].text != None:
+				elif horaLlegada != None:
 				
-					busResult['time'] = bus[3].text
-					busResult['time_type'] = "time"
+					busResult['horaLlegada'] = horaLlegada
 					
 				else:
 					results.append({
