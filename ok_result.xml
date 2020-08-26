@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<estimacion parada="508">
+	<solo_parada>
+		<bus>
+			<linea>70</linea>
+			<destino>
+				<![CDATA[Alboraia]]>
+			</destino>
+			<minutos>10 min.</minutos>
+			<horaLlegada />
+			<error/>
+		</bus>
+		<info/>
+		<bus>
+			<linea>93</linea>
+			<destino>
+				<![CDATA[Pass. Marítim]]>
+			</destino>
+			<minutos>15 min.</minutos>
+			<horaLlegada />
+			<error/>
+		</bus>
+		<info/>
+		<bus>
+			<linea>93</linea>
+			<destino>
+				<![CDATA[Pass. Marítim]]>
+			</destino>
+			<minutos>28 min.</minutos>
+			<horaLlegada />
+			<error/>
+		</bus>
+		<info/>
+		<bus>
+			<linea>70</linea>
+			<destino>
+				<![CDATA[Alboraia]]>
+			</destino>
+			<minutos>29 min.</minutos>
+			<horaLlegada />
+			<error/>
+		</bus>
+		<info/>
+		<bus>
+			<linea>N4</linea>
+			<destino>
+				<![CDATA[Est.del Nord]]>
+			</destino>
+			<minutos />
+			<horaLlegada>22:41</horaLlegada>
+			<error/>
+		</bus>
+		<info/>
+		<bus>
+			<linea>N4</linea>
+			<destino>
+				<![CDATA[Est.del Nord]]>
+			</destino>
+			<minutos />
+			<horaLlegada>23:32</horaLlegada>
+			<error/>
+		</bus>
+		<info/>
+	</solo_parada>
+	<parada_linea />
+	<info/>
+</estimacion>
