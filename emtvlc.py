@@ -3,7 +3,7 @@ import requests
 
 
 EMT_BUS_TIMES_URL = "https://www.emtvalencia.es/EMT/mapfunctions/MapUtilsPetitions.php?sec=getSAE"
-
+EMT_STOPS_IN_EXTENT_URL = "https://www.emtvalencia.es/opentripplanner-api-webapp/ws/metadata/stopsInExtent?lowerCornerLon=-0.48218544329629&lowerCornerLat=40.484680164392&upperCornerLon=-0.37360237444863&upperCornerLat=39.476258028086"
 
 class ApiException(Exception):
 
