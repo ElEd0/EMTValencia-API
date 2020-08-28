@@ -3,7 +3,7 @@ import requests
 
 
 EMT_BUS_TIMES_URL = "https://www.emtvalencia.es/EMT/mapfunctions/MapUtilsPetitions.php?sec=getSAE"
-EMT_STOPS_IN_EXTENT_URL = "https://www.emtvalencia.es/opentripplanner-api-webapp/ws/metadata/stopsInExtent?lowerCornerLon=-0.48218544329629&lowerCornerLat=40.484680164392&upperCornerLon=-0.37360237444863&upperCornerLat=39.476258028086"
+EMT_STOPS_IN_EXTENT_URL = "https://www.emtvalencia.es/opentripplanner-api-webapp/ws/metadata/stopsInExtent"
 
 class ApiException(Exception):
 
@@ -17,14 +17,7 @@ class EMTVLC:
     #def __init__(self):
 	#	pass
 	
-	def get_bus_times(self, stop, bus = 0, adaptados = False):
-		
-		data = {
-			'parada': str(stop),
-			'adaptados': "true" if adaptados else "false"
-		}
-		if bus != 0:
-			data['linea'] = bus
+	def get_xml_from_url(self, url, params):
 		
 		headers = {
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0',
@@ -36,20 +29,28 @@ class EMTVLC:
 			'Cache-Control': 'no-cache',
 		}
 		
-		r = requests.get(EMT_BUS_TIMES_URL, params=data, headers=headers)
+		r = requests.get(url, params=params, headers=headers)
 		
 		if r != None and r.status_code == 200:
 			responseText = r.text
 			#print(responseText)
 			#f = open('response.xml', 'w')
 			#f.write(responseText)
-			return self.parse_xml(responseText)
+			return ET.fromstring(responseText)
 		else:
 			raise ApiException("REQUEST", "API not accessible")
-
 	
-	def parse_xml(self, xmlString):
-		root = ET.fromstring(xmlString)
+	def get_bus_times(self, stop, bus = 0, adaptados = False):
+		
+		data = {
+			'parada': str(stop),
+			'adaptados': "true" if adaptados else "false"
+		}
+		if bus != 0:
+			data['linea'] = bus
+		
+		# call API
+		root = self.get_xml_from_url(EMT_BUS_TIMES_URL, data)
 		
 		if root.tag != "estimacion":
 			raise ApiException("XML", "Invalid XML body")
@@ -114,11 +115,29 @@ class EMTVLC:
 				results.append(busResult)
 		
 		return results
+
+	def get_stops_in_extent(self, lowerLat, lowerLon, upperLat, upperLon):
 		
-
-
-
-
+		# todo fix | trim values
+		#?lowerCornerLon=-0.48218544329629&lowerCornerLat=40.484680164392&upperCornerLon=-0.37360237444863&upperCornerLat=39.476258028086
+		
+		data = {
+			'lowerCornerLat': lowerLat,
+			'lowerCornerLon': lowerLon,
+			'upperCornerLat': upperLat,
+			'upperCornerLon': upperLon,
+		}
+		
+		# call API
+		root = self.get_xml_from_url(EMT_STOPS_IN_EXTENT_URL, data)
+		
+		if root.tag != "estimacion":
+			raise ApiException("XML", "Invalid XML body")
+		
+		results = []
+		
+		
+		
 
 
 
