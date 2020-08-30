@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 import requests
+import json
 
 
 EMT_BUS_TIMES_URL = "https://www.emtvalencia.es/EMT/mapfunctions/MapUtilsPetitions.php?sec=getSAE"
@@ -7,17 +8,19 @@ EMT_STOPS_IN_EXTENT_URL = "https://www.emtvalencia.es/opentripplanner-api-webapp
 
 class ApiException(Exception):
 
-    def __init__(self, errorCode, message):
-        self.errorCode = errorCode
-        self.message = message
-		
+	def __init__(self, errorCode, message):
+		self.errorCode = errorCode
+		self.message = message
+	
+	def __str__(self):
+		return self.errorCode + ": " + self.message
 
 class EMTVLC:
 	
-    #def __init__(self):
+	#def __init__(self):
 	#	pass
 	
-	def get_xml_from_url(self, url, params):
+	def get_from_url(self, url, params):
 		
 		headers = {
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0',
@@ -36,7 +39,7 @@ class EMTVLC:
 			#print(responseText)
 			#f = open('response.xml', 'w')
 			#f.write(responseText)
-			return ET.fromstring(responseText)
+			return responseText
 		else:
 			raise ApiException("REQUEST", "API not accessible")
 	
@@ -50,7 +53,8 @@ class EMTVLC:
 			data['linea'] = bus
 		
 		# call API
-		root = self.get_xml_from_url(EMT_BUS_TIMES_URL, data)
+		responseText = self.get_from_url(EMT_BUS_TIMES_URL, data)
+		root = ET.fromstring(responseText)
 		
 		if root.tag != "estimacion":
 			raise ApiException("XML", "Invalid XML body")
@@ -118,9 +122,6 @@ class EMTVLC:
 
 	def get_stops_in_extent(self, lowerLat, lowerLon, upperLat, upperLon):
 		
-		# todo fix | trim values
-		#?lowerCornerLon=-0.48218544329629&lowerCornerLat=40.484680164392&upperCornerLon=-0.37360237444863&upperCornerLat=39.476258028086
-		
 		data = {
 			'lowerCornerLat': lowerLat,
 			'lowerCornerLon': lowerLon,
@@ -128,15 +129,64 @@ class EMTVLC:
 			'upperCornerLon': upperLon,
 		}
 		
-		# call API
-		root = self.get_xml_from_url(EMT_STOPS_IN_EXTENT_URL, data)
-		
-		if root.tag != "estimacion":
-			raise ApiException("XML", "Invalid XML body")
-		
 		results = []
+		# call API
+		responseText = self.get_from_url(EMT_STOPS_IN_EXTENT_URL, data)
 		
+		if responseText[0] == "{": #is json
+			
+			responseJson = json.loads(responseText)
+			results = responseJson['stop']
+			
+			for stop in results:
+				rtI = stop['routes']['rtI']
+				if isinstance(rtI, dict):
+					rtI = [rtI]
+				stop['routes'] = rtI
 		
+		else: #is xml (maybe?)
+			# the following code is untested
+			if root.tag != "stops":
+				raise ApiException("XML", "Invalid XML body")
+			
+			for stop in root:
+				#filter out elements
+				if stop.tag == "stop":
+					
+					if len(stop) != 6:
+						results.append({
+							'error': "Invalid stop response"
+						})
+						continue
+					
+					lat = stop[0].text
+					lon = stop[1].text
+					name = stop[2].text
+					routesTag = stop[3]
+					stopId = stop[4].text
+					ubication = stop[5].text
+			
+					routes = []
+					for rtI in routesTag:
+						if rtI.tag == "rtI":
+							routes.append({
+								'headSign': rtI[0].text,
+								'lineaId': rtI[1].text,
+								'lineaName': rtI[2].text,
+								'lineaNumber': rtI[3].text,
+								'type': rtI[4].text
+							})
+							
+					results.append({
+						'lat': lat,
+						'lon': lon,
+						'name': name,
+						'routes': routes,
+						'stopId': stopId,
+						'ubication': ubication
+					})
+	
+		return results
 		
 
 
