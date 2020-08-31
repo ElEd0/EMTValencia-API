@@ -1,5 +1,5 @@
 import sys
-from emtvlc import EMTVLC, ApiException
+from emtvlc import EMTVLC, EMTApiException
 import json
 
 argv_len = len(sys.argv)
@@ -40,7 +40,7 @@ if method == "bus_times":
 	
 		response = EMTVLC().get_bus_times(parada, bus, adaptados)
 		
-	except ApiException as e:
+	except EMTApiException as e:
 		print(e)
 		exit()
 
@@ -74,7 +74,7 @@ elif method == "stops_in_extent":
 	
 		response = EMTVLC().get_stops_in_extent(lLat, lLon, uLat, uLon)
 		
-	except ApiException as e:
+	except EMTApiException as e:
 		print(e)
 		exit()
 

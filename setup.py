@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
 	long_description = fh.read()
 
 setuptools.setup(
-	name="emtvlc-api",
-	version="0.1",
+	name="emtvlc_api",
+	version="0.1.1",
 	author="Ed0",
 	author_email="ed0@ed0.com",
 	description="Python module to retrieve bus times and stops for EMT valencia",

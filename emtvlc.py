@@ -6,7 +6,7 @@ import json
 EMT_BUS_TIMES_URL = "https://www.emtvalencia.es/EMT/mapfunctions/MapUtilsPetitions.php?sec=getSAE"
 EMT_STOPS_IN_EXTENT_URL = "https://www.emtvalencia.es/opentripplanner-api-webapp/ws/metadata/stopsInExtent"
 
-class ApiException(Exception):
+class EMTApiException(Exception):
 
 	def __init__(self, errorCode, message):
 		self.errorCode = errorCode
@@ -41,7 +41,7 @@ class EMTVLC:
 			#f.write(responseText)
 			return responseText
 		else:
-			raise ApiException("REQUEST", "API not accessible")
+			raise EMTApiException("REQUEST", "API not accessible")
 	
 	def get_bus_times(self, stop, bus = 0, adaptados = False):
 		
@@ -57,7 +57,7 @@ class EMTVLC:
 		root = ET.fromstring(responseText)
 		
 		if root.tag != "estimacion":
-			raise ApiException("XML", "Invalid XML body")
+			raise EMTApiException("XML", "Invalid XML body")
 		
 		results = []
 		
@@ -147,7 +147,7 @@ class EMTVLC:
 		else: #is xml (maybe?)
 			# the following code is untested
 			if root.tag != "stops":
-				raise ApiException("XML", "Invalid XML body")
+				raise EMTApiException("XML", "Invalid XML body")
 			
 			for stop in root:
 				#filter out elements
