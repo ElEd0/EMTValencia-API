@@ -4,6 +4,12 @@ Python module that retrieves bus times for a given stop or stops within an exten
 
 Data from EMT valencia.
 
+# pip
+
+```
+pip install emtvlcapi
+```
+
 # Import
 
 ```
