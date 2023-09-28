@@ -1,0 +1,25 @@
+[build-system]
+requires	  = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "emtvlcapi"
+version = "1.0.0"
+description = "Python module that retrieves bus times for a given stop or stops within an extent for EMT Valencia"
+readme = "README.md"
+authors = [{ name = "Ed0", email = "ed0@ed0.es" }]
+license = { file = "LICENSE" }
+classifiers = [
+	"License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+	"Programming Language :: Python",
+	"Programming Language :: Python :: 3",
+]
+keywords = ["emt", "vlc", "valencia", "api", "parada", "stop", "bus", "time", "tiempo"]
+dependencies = [
+	"requests",
+]
+requires-python = ">=3.6"
+
+[project.urls]
+Homepage = "https://github.com/ElEd0/EMTValencia-API"
+Issues = "https://github.com/ElEd0/EMTValencia-API/issues"

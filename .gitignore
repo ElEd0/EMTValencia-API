@@ -1,4 +1,6 @@
-/response/
-/emtvlcapi.egg-info/
-/build/
-/setup.bat
+__pycache__
+*/*.egg-info
+venv
+dist
+build
+tests
