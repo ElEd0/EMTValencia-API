@@ -4,6 +4,8 @@
 [![PyPi Python Versions](https://img.shields.io/pypi/pyversions/emtvlcapi.svg)](https://pypi.python.org/pypi/emtvlcapi/)
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 
+![tests](https://github.com/ElEd0/EMTValencia-API/actions/workflows/run-tests.yml/badge.svg)
+
 Python module that retrieves bus times for a given stop and stops within an extent.
 
 Data from EMT valencia.
