@@ -8,12 +8,18 @@ Python module that retrieves bus times for a given stop and stops within an exte
 
 Data from EMT valencia.
 
-# pip
+# Install
 
 Module is available at [PyPI](https://pypi.org/project/emtvlcapi/) and can be installed via pip:
 
 ```
 pip install emtvlcapi
+```
+
+Alternatively you can clone repo and install from source
+```
+pip install -r requirements.txt
+pip install .
 ```
 
 # Usage
@@ -75,7 +81,7 @@ Output:
 
 # cli
 
-The repo also includes a python cli with a working example
+The module also works as a cli
 
 ```
 $ python -m emtvlcapi bus_times 508
