@@ -31,4 +31,4 @@ jobs:
       - name: Test with pytest
         run: |
           pip install pytest
-          pytest -v -s
+          python3 -m pytest -v -s
