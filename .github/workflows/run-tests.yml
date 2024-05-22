@@ -1,4 +1,4 @@
-name: Run Tests via Pytest
+name: Tests
 
 on:
   push:
@@ -30,7 +30,5 @@ jobs:
         continue-on-error: true
       - name: Test with pytest
         run: |
-          coverage run -m pytest  -v -s
-      - name: Generate Coverage Report
-        run: |
-          coverage report -m
+          pip install pytest
+          pytest -v -s
