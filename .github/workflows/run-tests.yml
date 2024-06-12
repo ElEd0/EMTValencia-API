@@ -3,7 +3,7 @@ name: Tests
 on:
   push:
   schedule:
-    - cron: 0 1 * * 1
+    - cron: 0 1 1,15 * *
     
 jobs:
   build:
